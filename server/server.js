@@ -1,17 +1,20 @@
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
 const SignupCollection = require('./mongo');
-
+const mongoose = require('mongoose');
+require('dotenv').config(); 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+mongoose.connect(process.env.MONGO_URI, {
+}).then(() => {
+    console.log('MongoDB connected successfully');
+}).catch(err => {
+    console.error('MongoDB connection error:', err);
+});
 
-mongoose.connect("mongodb://localhost:27017/stockprediction_mern")
-    .then(() => console.log("MongoDB connected"))
-    .catch(err => console.log("Failed to connect to MongoDB:", err));
 
 app.post('/Signup', async (req, res) => {
     const { email, password, fname, lname } = req.body;
@@ -36,9 +39,7 @@ app.post('/Signup', async (req, res) => {
     }
 });
 
-app.listen(8000, () => {
-    console.log('Server is running on port 8000');
-});
+
 app.post('/Login',async(req,res)=>{
     const {email,password}=req.body;
     try {
@@ -59,3 +60,6 @@ app.post('/Login',async(req,res)=>{
         res.json("notexist")
     }
 })
+app.listen(8000, () => {
+    console.log('Server is running on port 8000');
+});
