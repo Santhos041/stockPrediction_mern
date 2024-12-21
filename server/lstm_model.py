@@ -54,8 +54,6 @@ def train_model(features, target, epochs=10):
     model.save(MODEL_FILE)
 
     return model, X_test, y_test
-
-
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
